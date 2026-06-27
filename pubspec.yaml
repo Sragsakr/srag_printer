@@ -1,7 +1,8 @@
 name: srag_printer
 description: Flexible Flutter thermal printing package for PDF widgets, PDFs, and image frames over network, USB, and Bluetooth.
 version: 0.1.0
-publish_to: none
+homepage: https://github.com/seragsabrysakr/srag_printer
+repository: https://github.com/seragsabrysakr/srag_printer
 
 environment:
   sdk: ">=3.0.0 <4.0.0"
@@ -23,4 +24,9 @@ dev_dependencies:
   flutter_lints: ^5.0.0
   flutter_test:
     sdk: flutter
+
+flutter:
+  assets:
+    - assets/fonts/Almarai-Regular.ttf
+    - assets/fonts/Almarai-Bold.ttf
 

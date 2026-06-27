@@ -46,6 +46,14 @@ class _ExampleHomePageState extends State<ExampleHomePage> {
   PrinterDevice? _selectedDevice;
 
   @override
+  void initState() {
+    super.initState();
+    SragFonts.load().then((_) => setState(() {}));
+  }
+
+  SragReceiptStyle get _receiptStyle => SragReceiptStyle.defaults();
+
+  @override
   void dispose() {
     _host.dispose();
     _port.dispose();
@@ -126,8 +134,16 @@ class _ExampleHomePageState extends State<ExampleHomePage> {
                 child: const Text('Print widget'),
               ),
               FilledButton(
-                onPressed: _printReceipt,
-                child: const Text('Print receipt'),
+                onPressed: _printReceiptEnglish,
+                child: const Text('English receipt'),
+              ),
+              FilledButton(
+                onPressed: _printReceiptArabic,
+                child: const Text('Arabic receipt'),
+              ),
+              FilledButton(
+                onPressed: _printReceiptBilingual,
+                child: const Text('Bilingual receipt'),
               ),
               OutlinedButton(
                 onPressed: _renderPdfPreview,
@@ -241,35 +257,72 @@ class _ExampleHomePageState extends State<ExampleHomePage> {
   Future<void> _printCustomWidget() async {
     await _run(
       () => _printer().printWidget(
-        (_) => pw.Column(
-          children: [
-            pw.Text('srag_printer custom widget'),
-            pw.Divider(),
-            pw.Text('Any pdf widget can be printed.'),
-          ],
-        ),
+        (_) {
+          final style = _receiptStyle;
+          return SragReceipt(
+            style: style,
+            children: [
+              ReceiptHeader(
+                style: style,
+                titles: const [
+                  'srag_printer',
+                  'Thermal Printing Solution',
+                ],
+              ),
+              ReceiptDivider(),
+              pw.Center(child: pw.Text('Welcome to srag_printer!')),
+              pw.Center(child: pw.Text('Print any PDF widget with ease')),
+              pw.SizedBox(height: 4),
+              pw.Center(child: pw.Text('srag.sabry@gmail.com')),
+              pw.Center(child: pw.Text('+201029382968')),
+              ReceiptDivider(),
+              pw.Directionality(
+                textDirection: pw.TextDirection.rtl,
+                child: pw.Column(
+                  children: [
+                    pw.Center(child: pw.Text('مرحباً بكم في طباعة سراج!')),
+                    pw.Center(child: pw.Text('اطبع أي محتوى بسهولة تامة')),
+                  ],
+                ),
+              ),
+              pw.SizedBox(height: 8),
+            ],
+          );
+        },
       ),
     );
   }
 
-  Future<void> _printReceipt() async {
+  // ---------------------------------------------------------------------------
+  // English receipt
+  // ---------------------------------------------------------------------------
+  Future<void> _printReceiptEnglish() async {
+    final style = _receiptStyle;
     await _run(
       () => _printer().printWidget(
         (_) => SragReceipt(
+          style: style,
           children: [
             ReceiptHeader(
-              titles: const ['srag_printer receipt', 'Default template'],
+              style: style,
+              titles: const ['Coffee House', 'Tax Invoice'],
               infoRows: const [
                 ReceiptKeyValue(label: 'Invoice', value: '10001'),
                 ReceiptKeyValue(label: 'Date', value: '2026-06-27'),
+                ReceiptKeyValue(label: 'Cashier', value: 'John'),
               ],
             ),
             ReceiptTable<Map<String, String>>(
+              style: style,
               columns: [
                 ReceiptTableColumn(
                   title: 'Product',
-                  flex: 4,
+                  flex: 2,
                   valueBuilder: (item) => item['name']!,
+                ),
+                ReceiptTableColumn(
+                  title: 'Tax',
+                  valueBuilder: (item) => item['tax']!,
                 ),
                 ReceiptTableColumn(
                   title: 'Qty',
@@ -281,21 +334,170 @@ class _ExampleHomePageState extends State<ExampleHomePage> {
                 ),
               ],
               rows: const [
-                {'name': 'Coffee', 'qty': '1', 'total': '12.00'},
-                {'name': 'Sandwich', 'qty': '2', 'total': '24.00'},
+                {'name': 'Latte', 'qty': '2', 'total': '24.00', 'tax': '2.40'},
+                {'name': 'Croissant', 'qty': '1', 'total': '8.00', 'tax': '0.80'},
+                {'name': 'Orange Juice', 'qty': '1', 'total': '10.00', 'tax': '1.00'},
               ],
             ),
             ReceiptTotals(
+              style: style,
               rows: const [
-                ReceiptKeyValue(label: 'Subtotal', value: '36.00'),
-                ReceiptKeyValue(label: 'Tax', value: '5.40'),
-                ReceiptKeyValue(label: 'Total', value: '41.40'),
+                ReceiptKeyValue(label: 'Subtotal', value: '42.00'),
+                ReceiptKeyValue(label: 'Tax (10%)', value: '4.20'),
+                ReceiptKeyValue(label: 'Total', value: '46.20'),
               ],
             ),
             ReceiptPayments(
-              rows: const [ReceiptKeyValue(label: 'Card', value: '41.40')],
+              style: style,
+              rows: const [ReceiptKeyValue(label: 'Card', value: '46.20')],
             ),
-            ReceiptFooter(lines: const ['Thank you']),
+            ReceiptFooter(
+              style: style,
+              lines: const ['Thank you for your visit!', 'www.coffeehouse.com'],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // ---------------------------------------------------------------------------
+  // Arabic receipt (RTL)
+  // ---------------------------------------------------------------------------
+  Future<void> _printReceiptArabic() async {
+    final style = _receiptStyle;
+    await _run(
+      () => _printer().printWidget(
+        (_) => SragReceipt(
+          style: style,
+          textDirection: pw.TextDirection.rtl,
+          children: [
+            ReceiptHeader(
+              style: style,
+              titles: const ['مقهى البيت', 'فاتورة ضريبية'],
+              infoRows: const [
+                ReceiptKeyValue(label: 'رقم الفاتورة', value: '10002',),
+                ReceiptKeyValue(label: 'التاريخ', value: '2026-06-27'),
+                ReceiptKeyValue(label: 'الكاشير', value: 'أحمد'),
+              ],
+            ),
+            ReceiptTable<Map<String, String>>(
+              style: style,
+              columns: [
+                ReceiptTableColumn(
+                  title: 'المنتج',
+                  flex: 2,
+                  valueBuilder: (item) => item['name']!,
+                ),
+                ReceiptTableColumn(
+                  title: 'الضريبة',
+                  valueBuilder: (item) => item['tax']!,
+                ),
+                ReceiptTableColumn(
+                  title: 'الكمية',
+                  valueBuilder: (item) => item['qty']!,
+                ),
+                ReceiptTableColumn(
+                  title: 'الإجمالي',
+                  valueBuilder: (item) => item['total']!,
+                ),
+              ],
+              rows: const [
+                {'name': 'قهوة لاتيه', 'qty': '2', 'total': '24.00', 'tax': '2.40'},
+                {'name': 'كرواسون', 'qty': '1', 'total': '8.00', 'tax': '0.80'},
+                {'name': 'عصير برتقال', 'qty': '1', 'total': '10.00', 'tax': '1.00'},
+              ],
+            ),
+            ReceiptTotals(
+              style: style,
+              rows: const [
+                ReceiptKeyValue(label: 'المجموع الفرعي', value: '42.00'),
+                ReceiptKeyValue(label: 'الضريبة (10%)', value: '4.20'),
+                ReceiptKeyValue(label: 'الإجمالي', value: '46.20'),
+              ],
+            ),
+            ReceiptPayments(
+              style: style,
+              title: 'طرق الدفع',
+              rows: const [ReceiptKeyValue(label: 'نقدي', value: '46.20')],
+            ),
+            ReceiptFooter(
+              style: style,
+              lines: const ['شكراً لزيارتكم!', 'www.albait-cafe.com'],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // ---------------------------------------------------------------------------
+  // Bilingual receipt (English + Arabic)
+  // ---------------------------------------------------------------------------
+  Future<void> _printReceiptBilingual() async {
+    final style = _receiptStyle;
+    await _run(
+      () => _printer().printWidget(
+        (_) => SragReceipt(
+          style: style,
+          textDirection: pw.TextDirection.rtl,
+          children: [
+            ReceiptHeader(
+              style: style,
+              titles: const ['Coffee House | مقهى البيت', 'Tax Invoice | فاتورة ضريبية'],
+              infoRows: const [
+                ReceiptKeyValue(label:'فاتورة' , value: '10003', trailingLabel:'Invoice' ),
+                ReceiptKeyValue(label: 'التاريخ' , value: '2026-06-27', trailingLabel:'Date'),
+                ReceiptKeyValue(label:'الكاشير' , value: 'Ahmed | أحمد', trailingLabel:'Cashier' ),
+              ],
+            ),
+            ReceiptTable<Map<String, String>>(
+              style: style,
+              columns: [
+                ReceiptTableColumn(
+                  title: 'Product',
+                  flex: 2,
+                  valueBuilder: (item) => item['name']!,
+                ),
+                ReceiptTableColumn(
+                  title: 'Tax',
+                  valueBuilder: (item) => item['tax']!,
+                ),
+                ReceiptTableColumn(
+                  title: 'Qty',
+                  valueBuilder: (item) => item['qty']!,
+                ),
+                ReceiptTableColumn(
+                  title: 'Total',
+                  valueBuilder: (item) => item['total']!,
+                ),
+              ],
+              rows: const [
+                {'name': 'Latte | لاتيه', 'qty': '2', 'total': '24.00', 'tax': '2.40'},
+                {'name': 'Croissant | كرواسون', 'qty': '1', 'total': '8.00', 'tax': '0.80'},
+                {'name': 'Juice | عصير', 'qty': '1', 'total': '10.00', 'tax': '1.00'},
+              ],
+            ),
+            ReceiptTotals(
+              style: style,
+              rows: const [
+                ReceiptKeyValue(label: 'Subtotal | المجموع', value: '42.00'),
+                ReceiptKeyValue(label: 'Tax | الضريبة (10%)', value: '4.20'),
+                ReceiptKeyValue(label: 'Total | الإجمالي', value: '46.20'),
+              ],
+            ),
+            ReceiptPayments(
+              style: style,
+              title: 'Payment Methods | طرق الدفع',
+              rows: const [ReceiptKeyValue(label: 'Card | بطاقة', value: '46.20')],
+            ),
+            ReceiptFooter(
+              style: style,
+              lines: const [
+                'Thank you! | شكراً لزيارتكم!',
+                'www.coffeehouse.com',
+              ],
+            ),
           ],
         ),
       ),

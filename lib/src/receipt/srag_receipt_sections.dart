@@ -143,9 +143,9 @@ class ReceiptInfoSection extends pw.StatelessWidget {
           pw.Padding(
             padding: const pw.EdgeInsets.symmetric(vertical: 2),
             child: pw.Row(
-              mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: pw.MainAxisAlignment.spaceEvenly,
               children: [
-                pw.Expanded(child: pw.Text(row.label, style: style.boldTextStyle)),
+                pw.Expanded(child: pw.Text(row.label, style: style.boldTextStyle,textAlign: pw.TextAlign.center,)),
                 pw.Expanded(
                   child: pw.Text(
                     row.value,
@@ -156,7 +156,7 @@ class ReceiptInfoSection extends pw.StatelessWidget {
                 pw.Expanded(
                   child: pw.Text(
                     row.trailingLabel ?? '',
-                    textAlign: pw.TextAlign.right,
+                    textAlign: pw.TextAlign.center,
                     style: style.boldTextStyle,
                   ),
                 ),
@@ -262,6 +262,7 @@ class ReceiptTable<T> extends pw.StatelessWidget {
         if (showDividers) ReceiptDivider(color: style.dividerColor),
         if (showHeader)
           pw.Row(
+            mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
             children: [
               for (final column in columns)
                 pw.Expanded(
@@ -286,6 +287,7 @@ class ReceiptTable<T> extends pw.StatelessWidget {
     return pw.Padding(
       padding: const pw.EdgeInsets.symmetric(vertical: 2),
       child: pw.Row(
+        mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
         children: [
           for (final column in columns)
             pw.Expanded(

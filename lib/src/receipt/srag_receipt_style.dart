@@ -1,6 +1,8 @@
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 
+import 'srag_default_fonts.dart';
+
 /// Visual style defaults shared by receipt widgets.
 class SragReceiptStyle {
   /// Creates a receipt style.
@@ -13,20 +15,25 @@ class SragReceiptStyle {
   });
 
   /// Builds a compact default thermal receipt style.
+  ///
+  /// When [font] and [boldFont] are omitted, the bundled Almarai fonts are
+  /// used if [SragFonts.load] has been called. Pass explicit fonts to override.
   factory SragReceiptStyle.defaults({
     pw.Font? font,
     pw.Font? boldFont,
   }) {
+    final effectiveFont = font ?? SragFonts.regular;
+    final effectiveBold = boldFont ?? font ?? SragFonts.bold ?? effectiveFont;
     return SragReceiptStyle(
-      textStyle: pw.TextStyle(font: font, fontSize: 7, color: PdfColors.black),
+      textStyle: pw.TextStyle(font: effectiveFont, fontSize: 7, color: PdfColors.black),
       boldTextStyle: pw.TextStyle(
-        font: boldFont ?? font,
+        font: effectiveBold,
         fontSize: 7,
         fontWeight: pw.FontWeight.bold,
         color: PdfColors.black,
       ),
       titleTextStyle: pw.TextStyle(
-        font: boldFont ?? font,
+        font: effectiveBold,
         fontSize: 9,
         fontWeight: pw.FontWeight.bold,
         color: PdfColors.black,

@@ -1,8 +1,30 @@
-# srag_printer
+<p align="center">
+  <img src="screenshoots/logo.png" alt="srag_printer" width="400"/>
+</p>
 
-`srag_printer` is a flexible Flutter thermal printing package for printing PDF widgets, PDF bytes, and image frames through ESC/POS thermal printers.
+<h1 align="center">srag_printer</h1>
+
+<p align="center">
+  A flexible Flutter thermal printing package for printing PDF widgets, PDF bytes, and image frames through ESC/POS thermal printers.
+</p>
+
+---
 
 It is intentionally generic. It does not know about your POS models, tax rules, ZATCA QR generation, preferences, providers, or app assets. Your app builds the content; `srag_printer` renders and prints it.
+
+## Screenshots
+
+<p align="center">
+  <img src="screenshoots/en.png" alt="English Receipt" width="250"/>
+  &nbsp;&nbsp;
+  <img src="screenshoots/ar.png" alt="Arabic Receipt" width="250"/>
+  &nbsp;&nbsp;
+  <img src="screenshoots/ar_en.png" alt="Bilingual Receipt" width="250"/>
+</p>
+
+| English Receipt | Arabic Receipt (RTL) | Bilingual Receipt |
+|:---:|:---:|:---:|
+| LTR layout | Full RTL support | English + Arabic side by side |
 
 ## Acknowledgements
 
@@ -239,6 +261,111 @@ await printer.printWidget(
     ],
   ),
 );
+```
+
+## Arabic / RTL and Custom Fonts
+
+`srag_printer` ships with **Almarai** (Regular + Bold) as bundled package assets. These fonts support both Latin and Arabic glyphs out of the box.
+
+### Loading the default fonts
+
+Call `SragFonts.load()` once at app startup (or before the first print). After that, `SragReceiptStyle.defaults()` automatically uses the bundled fonts:
+
+```dart
+import 'package:srag_printer/srag_printer.dart';
+
+// Call once, e.g. in initState or main:
+await SragFonts.load();
+
+// SragReceiptStyle.defaults() now uses Almarai automatically:
+final style = SragReceiptStyle.defaults();
+```
+
+### Creating a style with the loaded fonts
+
+```dart
+final style = SragReceiptStyle.defaults(
+  font: almaraiRegular,
+  boldFont: almaraiBold,
+);
+```
+
+### Arabic receipt (RTL)
+
+```dart
+await printer.printWidget(
+  (_) => SragReceipt(
+    style: style,
+    textDirection: pw.TextDirection.rtl,
+    children: [
+      ReceiptHeader(
+        style: style,
+        titles: const ['مقهى البيت', 'فاتورة ضريبية'],
+        infoRows: const [
+          ReceiptKeyValue(label: 'رقم الفاتورة', value: '10002'),
+          ReceiptKeyValue(label: 'التاريخ', value: '2026-06-27'),
+        ],
+      ),
+      ReceiptTable<Map<String, String>>(
+        style: style,
+        columns: [
+          ReceiptTableColumn(title: 'المنتج', flex: 2, valueBuilder: (x) => x['name']!),
+          ReceiptTableColumn(title: 'الكمية', valueBuilder: (x) => x['qty']!),
+          ReceiptTableColumn(title: 'الإجمالي', valueBuilder: (x) => x['total']!),
+        ],
+        rows: const [
+          {'name': 'قهوة لاتيه', 'qty': '2', 'total': '24.00'},
+        ],
+      ),
+      ReceiptTotals(
+        style: style,
+        rows: const [
+          ReceiptKeyValue(label: 'المجموع', value: '24.00'),
+          ReceiptKeyValue(label: 'الضريبة', value: '2.40'),
+          ReceiptKeyValue(label: 'الإجمالي', value: '26.40'),
+        ],
+      ),
+      ReceiptFooter(style: style, lines: const ['شكراً لزيارتكم!']),
+    ],
+  ),
+);
+```
+
+### Bilingual receipt (English + Arabic)
+
+Use `trailingLabel` on `ReceiptKeyValue` to display both languages side by side:
+
+```dart
+await printer.printWidget(
+  (_) => SragReceipt(
+    style: style,
+    children: [
+      ReceiptHeader(
+        style: style,
+        titles: const ['Coffee House | مقهى البيت'],
+        infoRows: const [
+          ReceiptKeyValue(label: 'Invoice', value: '10003', trailingLabel: 'فاتورة'),
+          ReceiptKeyValue(label: 'Date', value: '2026-06-27', trailingLabel: 'التاريخ'),
+        ],
+      ),
+      // ... table, totals, footer with style: style
+    ],
+  ),
+);
+```
+
+### Using your own fonts
+
+You are not limited to the bundled Almarai font. Load any `.ttf` file and pass it to `SragReceiptStyle.defaults()` to override the defaults:
+
+```dart
+import 'package:flutter/services.dart' show rootBundle;
+import 'package:pdf/widgets.dart' as pw;
+
+final myFont = pw.Font.ttf(await rootBundle.load('assets/fonts/MyFont-Regular.ttf'));
+final myBold = pw.Font.ttf(await rootBundle.load('assets/fonts/MyFont-Bold.ttf'));
+
+final style = SragReceiptStyle.defaults(font: myFont, boldFont: myBold);
 ```
 
 ## Custom Table Rows

@@ -11,6 +11,7 @@ export 'src/discovery/printer_device.dart';
 export 'src/discovery/printer_discovery_request.dart';
 export 'src/discovery/srag_printer_discovery.dart';
 export 'src/esc_pos/esc_pos_image_encoder.dart';
+export 'src/receipt/srag_default_fonts.dart';
 export 'src/receipt/srag_receipt.dart';
 export 'src/receipt/srag_receipt_sections.dart';
 export 'src/receipt/srag_receipt_style.dart';
