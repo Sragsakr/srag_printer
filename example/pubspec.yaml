@@ -1,0 +1,21 @@
+name: srag_printer_example
+description: Example app for srag_printer.
+publish_to: none
+version: 0.1.0
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  image: ^4.1.7
+  pdf: any
+  srag_printer:
+    path: ..
+
+dev_dependencies:
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
