@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="screenshoots/logo.png" alt="srag_printer" width="400"/>
+  <img src="https://raw.githubusercontent.com/seragsabrysakr/srag_printer/main/screenshoots/logo.png" alt="srag_printer" width="400"/>
 </p>
 
 <h1 align="center">srag_printer</h1>
@@ -15,11 +15,11 @@ It is intentionally generic. It does not know about your POS models, tax rules, 
 ## Screenshots
 
 <p align="center">
-  <img src="screenshoots/en.png" alt="English Receipt" width="250"/>
+  <img src="https://raw.githubusercontent.com/seragsabrysakr/srag_printer/main/screenshoots/en.png" alt="English Receipt" width="250"/>
   &nbsp;&nbsp;
-  <img src="screenshoots/ar.png" alt="Arabic Receipt" width="250"/>
+  <img src="https://raw.githubusercontent.com/seragsabrysakr/srag_printer/main/screenshoots/ar.png" alt="Arabic Receipt" width="250"/>
   &nbsp;&nbsp;
-  <img src="screenshoots/ar_en.png" alt="Bilingual Receipt" width="250"/>
+  <img src="https://raw.githubusercontent.com/seragsabrysakr/srag_printer/main/screenshoots/ar_en.png" alt="Bilingual Receipt" width="250"/>
 </p>
 
 | English Receipt | Arabic Receipt (RTL) | Bilingual Receipt |

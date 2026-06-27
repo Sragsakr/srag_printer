@@ -1,0 +1,15 @@
+.idea/
+build/
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+*.iml
+screenshoots/
+example/ios/
+example/android/
+example/macos/
+example/windows/
+example/web/
+example/linux/
+example/assets/
+example/build/

@@ -1,8 +1,15 @@
 name: srag_printer
 description: Flexible Flutter thermal printing package for PDF widgets, PDFs, and image frames over network, USB, and Bluetooth.
-version: 0.1.0
+version: 0.1.1
 homepage: https://github.com/seragsabrysakr/srag_printer
 repository: https://github.com/seragsabrysakr/srag_printer
+issue_tracker: https://github.com/seragsabrysakr/srag_printer/issues
+topics:
+  - printer
+  - thermal-printer
+  - esc-pos
+  - receipt
+  - bluetooth
 
 environment:
   sdk: ">=3.0.0 <4.0.0"
@@ -15,10 +22,9 @@ dependencies:
   ffi: ^2.1.2
   flutter_blue_plus: ^1.36.8
   image: ^4.1.7
-  pdf: any
+  pdf: ^3.12.0
   pdfx: ^2.9.2
-  usb_serial:
-    git: https://github.com/jymden/usbserial.git
+  usb_serial: ^0.5.2
 
 dev_dependencies:
   flutter_lints: ^5.0.0
